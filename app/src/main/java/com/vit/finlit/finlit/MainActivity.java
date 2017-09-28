@@ -1,8 +1,13 @@
 package com.vit.finlit.finlit;
 
+import android.app.ActionBar;
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,9 +53,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,8 +66,6 @@ public class MainActivity extends AppCompatActivity
         DownloadTask task = new DownloadTask();
         task.execute("htpps://api.openweathermap.ord/data/2.5/weather?q=London,uk");
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,7 @@ public class MainActivity extends AppCompatActivity
         content.animate().alpha(1f).setDuration(500);
 
         ImageView imgFavorite = (ImageView) findViewById(R.id.donut);
-        imgFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getStuff();
-            }
-        });
+        imgFavorite.setOnClickListener( listener );
 
         ListView myListView = (ListView) findViewById(R.id.listview);
         ArrayList<String> newArr = new ArrayList<String>();
@@ -92,11 +92,18 @@ public class MainActivity extends AppCompatActivity
         newArr.add("Isle");
 
 
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2" };
 
+        ArrayList<Map<String, String>> list = buildData();
+        String[] from = { "name", "purpose" };
+        int[] to = { R.id.listtxt, R.id.listtxt2 };
 
-        ArrayAdapter<String> newArrAd = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, newArr);
-        myListView.setAdapter(newArrAd);
+        SimpleAdapter adapter = new SimpleAdapter(this, list,
+                R.layout.list_view, from, to);
 
+        myListView.setAdapter(adapter);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -118,7 +125,9 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(false);
-        toggle.setHomeAsUpIndicator(R.mipmap.bars);
+        toggle.setHomeAsUpIndicator(R.mipmap.menu2);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("");
 
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
@@ -131,8 +140,21 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        navigationView.setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccentFaded)));
+        navigationView.setBackgroundResource(R.drawable.side_nav_bar1);
+        navigationView.setItemTextColor(ColorStateList.valueOf(Color.WHITE));
+        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.WHITE)
 
+
+
+
+
+
+
+
+
+
+
+        );
 
 
         // Create URL
@@ -140,6 +162,30 @@ public class MainActivity extends AppCompatActivity
 // Create connection
 
 
+    }
+
+    private ArrayList<Map<String, String>> buildData() {
+        ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(putData("ATM Withdrawal", "1200"));
+        list.add(putData("Morning chai", "20"));
+        list.add(putData("All mart", "450"));
+        list.add(putData("ATM Withdrawal", "1200"));
+        list.add(putData("Morning chai", "20"));
+        list.add(putData("All mart", "450"));
+        list.add(putData("ATM Withdrawal", "1200"));
+        list.add(putData("Morning chai", "20"));
+        list.add(putData("All mart", "450"));list.add(putData("ATM Withdrawal", "1200"));
+        list.add(putData("Morning chai", "20"));
+        list.add(putData("All mart", "450"));
+
+        return list;
+    }
+
+    private HashMap<String, String> putData(String name, String purpose) {
+        HashMap<String, String> item = new HashMap<String, String>();
+        item.put("name", name);
+        item.put("purpose", purpose);
+        return item;
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String>{
@@ -262,6 +308,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //getStuff();
+        }
+    };
 }
 
 
